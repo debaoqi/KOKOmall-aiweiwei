@@ -884,7 +884,7 @@
             
             /* 移动端优惠券文字提示 */
             .hero-coupon-text {
-                font-size: 0.95rem;
+                font-size: 1.05rem !important; /* 改为1.05rem，与hero-green-bar保持一致 */
                 padding: 6px 0;
                 width: 100% !important;
                 box-sizing: border-box;
@@ -894,6 +894,7 @@
                 overflow: visible !important; /* 改为visible，确保不影响下方元素 */
                 text-overflow: clip; /* 改为clip，避免截断 */
                 white-space: nowrap;
+                font-weight: 600 !important; /* 确保字重一致 */
             }
             
             /* 移动端：每行2个的橙色块容器 */
