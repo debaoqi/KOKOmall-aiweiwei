@@ -1003,8 +1003,14 @@
 
             .home-card .card-img {
                 border-radius: 3.4px;
-                height: 120px; /* 移动端也保持固定高度 */
-                width: 100%;
+                height: 120px !important; /* 移动端也保持固定高度 */
+                width: 100% !important;
+                display: block !important; /* 覆盖通用.card-img的flex布局 */
+                align-items: unset !important;
+                justify-content: unset !important;
+                aspect-ratio: unset !important;
+                position: relative !important;
+                overflow: hidden !important;
             }
 
             .home-card .card-img i {
@@ -1322,13 +1328,17 @@
         .home-card .card-img {
             background: #E0E0E0 !important;
             border-radius: 2.8px;
-            width: 100%;
-            height: 120px; /* 固定高度，确保高度不变 */
-            border: none;
-            position: relative;
-            overflow: hidden;
-            padding: 0;
-            margin: 0;
+            width: 100% !important;
+            height: 120px !important; /* 固定高度，确保高度不变 */
+            border: none !important;
+            position: relative !important;
+            overflow: hidden !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            display: block !important; /* 覆盖通用.card-img的flex布局 */
+            align-items: unset !important;
+            justify-content: unset !important;
+            aspect-ratio: unset !important; /* 覆盖通用样式的aspect-ratio */
             /* 防止重影和渲染问题 */
             -webkit-transform: translateZ(0);
             transform: translateZ(0);
@@ -1341,6 +1351,10 @@
         .home-card .card-img img {
             width: 100% !important;
             height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            min-width: 100% !important;
+            min-height: 100% !important;
             object-fit: cover !important; /* 改为cover，铺满占位框 */
             object-position: center !important;
             position: absolute !important;
@@ -1351,6 +1365,8 @@
             display: block !important;
             margin: 0 !important;
             padding: 0 !important;
+            border: none !important;
+            box-sizing: border-box !important;
             z-index: 10 !important; /* 确保图片在图标上方 */
             /* 防止重影和渲染问题 */
             image-rendering: -webkit-optimize-contrast; /* Safari */
@@ -7448,7 +7464,7 @@
                     
                     // 如果图片加载失败，自动删除整个产品卡片（与积分页面一致）
                     h += `<div class="card home-card" data-product-id="${productKey}" onclick="App.showProductInfo(${itemJson})">
-                <div class="card-img">${safeImg ? `<img src="${safeImg}" alt="${safeName}" onload="this.nextElementSibling.classList.add('img-hidden'); this.nextElementSibling.style.display='none';" onerror="console.warn('首页图片加载失败，删除产品:', '${safeImg}', '产品:', '${escapeJsString(i.b || '')} ${safeName}'); const card = this.closest('.home-card'); if(card) card.remove();" loading="lazy" style="width:100% !important; height:100% !important; object-fit:cover !important; object-position:center; position:absolute; top:0; left:0; right:0; bottom:0; display:block; margin:0; padding:0; z-index:10;">` : ''}<i class="fas ${icon} ${safeImg ? 'img-hidden' : ''}" style="font-size:3rem; color:var(--accent); z-index:1; ${safeImg ? 'display:none;' : ''}"></i></div>
+                <div class="card-img">${safeImg ? `<img src="${safeImg}" alt="${safeName}" onload="this.nextElementSibling.classList.add('img-hidden'); this.nextElementSibling.style.display='none';" onerror="console.warn('首页图片加载失败，删除产品:', '${safeImg}', '产品:', '${escapeJsString(i.b || '')} ${safeName}'); const card = this.closest('.home-card'); if(card) card.remove();" loading="lazy" style="width:100% !important; height:100% !important; max-width:100% !important; max-height:100% !important; min-width:100% !important; min-height:100% !important; object-fit:cover !important; object-position:center; position:absolute; top:0; left:0; right:0; bottom:0; display:block; margin:0; padding:0; border:none; box-sizing:border-box; z-index:10;">` : ''}<i class="fas ${icon} ${safeImg ? 'img-hidden' : ''}" style="font-size:3rem; color:var(--accent); z-index:1; ${safeImg ? 'display:none;' : ''}"></i></div>
                 <div class="card-desc">
                     <div class="card-desc-text">${escapeHtml(productInfo.desc)}</div>
                     <div class="card-desc-rating">推荐指数: ${productInfo.starsHtml} ${productInfo.rating.toFixed(1)}</div>
