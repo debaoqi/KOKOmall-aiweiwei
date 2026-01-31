@@ -939,17 +939,22 @@
                 position: relative !important;
             }
             
-            /* 确保移动端图片可见 */
+            /* 确保移动端图片可见并铺满橙色块 */
             .hero-orange-block-item img {
                 display: block !important;
                 visibility: visible !important;
                 opacity: 1 !important;
-                position: relative !important;
+                position: absolute !important; /* 改为absolute，确保完全覆盖 */
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
                 z-index: 1 !important;
                 width: 100% !important;
                 height: 100% !important;
                 object-fit: cover !important; /* 铺满橙色块 */
                 object-position: center !important;
+                border-radius: 2.8px !important;
             }
 
             .hero-tag {
@@ -1011,6 +1016,29 @@
                 aspect-ratio: unset !important;
                 position: relative !important;
                 overflow: hidden !important;
+            }
+
+            /* 移动端首页图片样式 - 确保铺满占位框 */
+            .home-card .card-img img {
+                width: 100% !important;
+                height: 100% !important;
+                max-width: 100% !important;
+                max-height: 100% !important;
+                min-width: 100% !important;
+                min-height: 100% !important;
+                object-fit: cover !important; /* 铺满占位框 */
+                object-position: center !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                display: block !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                box-sizing: border-box !important;
+                z-index: 10 !important;
             }
 
             .home-card .card-img i {
