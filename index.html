@@ -673,7 +673,7 @@
         
         #hero-featured-blocks-4 {
             margin-top: 0; /* 紧贴上一层橙色块 */
-            margin-bottom: 12px; /* 与下方产品块的间距 */
+            margin-bottom: 3px; /* 与下方产品块的间距改为3px，与橙色块间距保持一致 */
             position: relative;
             z-index: 1;
         }
@@ -730,9 +730,10 @@
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 6px; /* 增加间距：从3px改为6px */
+            gap: 3px; /* 间距改为3px，与橙色块间距保持一致 */
             padding: 0 0 20px;
             margin: 0; /* 紧贴header底部，无间距 */
+            margin-top: 3px; /* 与上方最后一个橙色块容器的间距保持一致 */
             width: 100%;
             box-sizing: border-box;
             /* 紧贴状态栏：header高度约56px（padding 12px*2 + 内容32px），grid-2直接跟在header后面 */
@@ -922,7 +923,7 @@
             #hero-featured-blocks-4 {
                 display: grid !important;
                 margin-top: 0 !important; /* 紧贴上一层橙色块 */
-                margin-bottom: 12px !important; /* 与下方产品块的间距 */
+                margin-bottom: 3px !important; /* 与下方产品块的间距改为3px，与橙色块间距保持一致 */
                 visibility: visible !important;
                 opacity: 1 !important;
                 position: relative !important;
@@ -989,9 +990,10 @@
                only collapse to one column on very narrow screens (<360px) */
             .grid-2 {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 6px; /* 增加间距：从3px改为6px，与桌面端保持一致 */
+                gap: 3px; /* 间距改为3px，与橙色块间距保持一致 */
                 padding: 0 0 120px; /* 移除左右padding，确保靠边对齐 */
                 margin: 0; /* 紧贴header底部，无间距 */
+                margin-top: 3px; /* 与上方最后一个橙色块容器的间距保持一致 */
                 width: 100%;
                 box-sizing: border-box;
                 /* 增加底部padding，确保产品完整显示，不被底部导航遮挡 */
