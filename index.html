@@ -8027,7 +8027,7 @@
                     const imagePath = getProductImagePath(i, 'shop');
                     const safeImg = escapeJsString(imagePath);
                     // 如果有图片路径，使用img标签；否则使用图标
-                    const imgHtml = safeImg ? `<img src="${safeImg}" alt="${escapeHtml(i.n || '')}" onload="this.nextElementSibling.classList.add('img-hidden'); this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('img-hidden'); this.nextElementSibling.style.display='block';" loading="lazy" style="z-index:10;"><i class="fas ${icon} img-hidden" style="font-size:3rem; color:var(--accent); z-index:1; display:none;"></i>` : `<i class="fas ${icon}" style="font-size:3rem; color:var(--accent)"></i>`;
+                    const imgHtml = safeImg ? `<img src="${safeImg}" alt="${escapeHtml(i.n || '')}" onload="this.nextElementSibling.classList.add('img-hidden'); this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('img-hidden'); this.nextElementSibling.style.display='block';" loading="lazy" style="width:100% !important; height:100% !important; object-fit:cover !important; object-position:center; position:absolute; top:0; left:0; right:0; bottom:0; display:block; margin:0; padding:0; z-index:10;"><i class="fas ${icon} img-hidden" style="font-size:3rem; color:var(--accent); z-index:1; display:none;"></i>` : `<i class="fas ${icon}" style="font-size:3rem; color:var(--accent)"></i>`;
                     const itemJson = JSON.stringify(i).replace(/"/g, '&quot;');
                     const productInfo = getProductInfo(i);
                     const safeName = escapeJsString(i.n || '');
