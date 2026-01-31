@@ -1337,11 +1337,11 @@
             isolation: isolate; /* 创建新的层叠上下文，防止重叠 */
         }
 
-        /* 图片样式 - 完整显示，不裁剪，防止重影 */
+        /* 图片样式 - 铺满占位框，防止重影 */
         .home-card .card-img img {
             width: 100% !important;
             height: 100% !important;
-            object-fit: contain !important; /* 改为contain，完整显示图片 */
+            object-fit: cover !important; /* 改为cover，铺满占位框 */
             object-position: center !important;
             position: absolute !important;
             top: 0 !important;
@@ -7448,7 +7448,7 @@
                     
                     // 如果图片加载失败，自动删除整个产品卡片（与积分页面一致）
                     h += `<div class="card home-card" data-product-id="${productKey}" onclick="App.showProductInfo(${itemJson})">
-                <div class="card-img">${safeImg ? `<img src="${safeImg}" alt="${safeName}" onload="this.nextElementSibling.classList.add('img-hidden'); this.nextElementSibling.style.display='none';" onerror="console.warn('首页图片加载失败，删除产品:', '${safeImg}', '产品:', '${escapeJsString(i.b || '')} ${safeName}'); const card = this.closest('.home-card'); if(card) card.remove();" loading="lazy" style="z-index:10;">` : ''}<i class="fas ${icon} ${safeImg ? 'img-hidden' : ''}" style="font-size:3rem; color:var(--accent); z-index:1; ${safeImg ? 'display:none;' : ''}"></i></div>
+                <div class="card-img">${safeImg ? `<img src="${safeImg}" alt="${safeName}" onload="this.nextElementSibling.classList.add('img-hidden'); this.nextElementSibling.style.display='none';" onerror="console.warn('首页图片加载失败，删除产品:', '${safeImg}', '产品:', '${escapeJsString(i.b || '')} ${safeName}'); const card = this.closest('.home-card'); if(card) card.remove();" loading="lazy" style="width:100% !important; height:100% !important; object-fit:cover !important; object-position:center; position:absolute; top:0; left:0; right:0; bottom:0; display:block; margin:0; padding:0; z-index:10;">` : ''}<i class="fas ${icon} ${safeImg ? 'img-hidden' : ''}" style="font-size:3rem; color:var(--accent); z-index:1; ${safeImg ? 'display:none;' : ''}"></i></div>
                 <div class="card-desc">
                     <div class="card-desc-text">${escapeHtml(productInfo.desc)}</div>
                     <div class="card-desc-rating">推荐指数: ${productInfo.starsHtml} ${productInfo.rating.toFixed(1)}</div>
