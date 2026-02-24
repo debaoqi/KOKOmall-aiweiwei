@@ -84,14 +84,12 @@
         .page-container {
             height: 100%;
             overflow-y: auto;
-            overflow-x: hidden; /* 防止横向滚动 */
             -webkit-overflow-scrolling: touch;
             padding-bottom: 80px;
-            padding-top: 0; /* 紧贴状态栏，无间距 */
-            /* 安全区兜底 padding - 仅底部保留 */
+            padding-top: 0;
+            /* 安全区兜底 padding */
+            padding-top: env(safe-area-inset-top);
             padding-bottom: calc(80px + env(safe-area-inset-bottom));
-            position: relative; /* 确保定位上下文 */
-            touch-action: pan-y; /* 允许垂直滑动 */
         }
         
         #page-points {
@@ -108,11 +106,10 @@
             display: none;
             max-width: 600px;
             margin: 0 auto;
-            min-height: auto; /* 改为auto，避免高度计算问题 */
+            min-height: 100%;
             animation: fadeIn 0.3s ease;
             width: 100%;
             box-sizing: border-box;
-            overflow: visible; /* 确保内容可见 */
         }
 
         .page.active {
@@ -398,7 +395,7 @@
 
         .header {
             background: rgba(28, 28, 28, 0.95);
-            padding: calc(12px + env(safe-area-inset-top)) 16px 12px 4px; /* 上边距增加安全区域高度，左边距改为4px */
+            padding: 12px 16px 12px 4px; /* 左边距改为4px */
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
@@ -407,7 +404,7 @@
             border-radius: 0;
             margin: 0;
             position: sticky;
-            top: 0; /* 紧贴状态栏，无间距 */
+            top: 0;
             z-index: 100;
             backdrop-filter: blur(20px);
             box-shadow: 0 2px 10px rgba(28, 28, 28, 0.5);
@@ -546,11 +543,9 @@
             justify-content: center;
             position: sticky;
             /* keep hero fixed while page scrolls */
-            /* 紧贴header底部，无间距：header高度 = padding-top(12px) + padding-bottom(12px) + 内容高度(约32px) = 56px */
-            top: calc(env(safe-area-inset-top) + 56px); /* 状态栏高度 + header高度，确保无间距 */
+            top: 70px;
             z-index: 70;
-            overflow: hidden; /* 改为hidden，确保图片不溢出 */
-            position: relative; /* 确保子元素可以绝对定位 */
+            overflow: visible;
             box-shadow: 0 8px 24px rgba(28, 28, 28, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
             box-sizing: border-box;
         }
@@ -581,25 +576,11 @@
             z-index: 100;
             width: 100%;
             box-sizing: border-box;
-            /* 这是装饰性的黑色条，位于hero区域上方，用于视觉分隔 */
-            display: none; /* 隐藏黑色条，因为hero-banner.jpg已经覆盖了整个区域 */
-        }
-
-        /* hero-green-bar容器：紧贴header底部，无间距，整体上移靠近状态栏 */
-        .hero-green-bar-container {
-            position: relative;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-            margin-top: 0; /* 紧贴header底部，无间距 */
-            box-sizing: border-box;
-            /* 整体上移，与状态栏距离为0 */
-            margin-top: calc(-1 * env(safe-area-inset-top));
         }
 
         .hero-green-bar {
-            position: relative;
-            top: 0;
+            position: absolute;
+            top: 160px;
             left: 0;
             right: 0;
             height: 36px;
@@ -615,87 +596,25 @@
             white-space: nowrap;
             width: 100%;
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
 
-        /* 橙色块容器 - 在KOKOmall商城强力推荐下方，紧贴hero-green-bar */
+        /* 橙色块容器 - 在KOKOmall商城强力推荐下方 */
         .hero-orange-blocks {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 默认每行4个 */
+            display: flex;
             gap: 3px;
             width: 100%;
             height: 94px; /* 高度减小6px：从100px改为94px */
-            margin-top: 0; /* 紧贴hero-green-bar，无间距 */
-            margin-bottom: 3px; /* 两行橙色块之间的间距 */
+            margin-top: 48px; /* hero-green-bar的高度(36px) + 向下移动12px */
+            margin-bottom: 12px; /* 与下方产品块的间距 */
             padding: 0;
             box-sizing: border-box;
         }
-        
-        /* 第二层橙色块容器 */
-        #hero-featured-blocks-2 {
-            margin-top: 0; /* 紧贴上一层橙色块 */
-            margin-bottom: 8px; /* 与下方优惠券文字的间距 */
-        }
-        
-        /* 优惠券文字提示 */
-        .hero-coupon-text {
-            width: 100%;
-            text-align: center;
-            color: var(--primary); /* 橙色 */
-            font-size: 1.05rem;
-            font-weight: 600;
-            padding: 8px 0;
-            margin: 0;
-            white-space: nowrap;
-            background: transparent;
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
-        
-        /* 每行2个的橙色块容器（下方新增的两行） */
-        .hero-orange-blocks.two-columns {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* 每行2个 */
-            gap: 3px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* 第三、四层橙色块容器 */
-        #hero-featured-blocks-3 {
-            margin-top: 0; /* 紧贴优惠券文字 */
-            margin-bottom: 3px; /* 两行橙色块之间的间距 */
-            position: relative;
-            z-index: 1;
-        }
-        
-        #hero-featured-blocks-4 {
-            margin-top: 0; /* 紧贴上一层橙色块 */
-            margin-bottom: 3px; /* 与下方产品块的间距改为3px，与橙色块间距保持一致 */
-            position: relative;
-            z-index: 1;
-        }
 
         .hero-orange-block-item {
+            flex: 1;
             background: var(--primary);
             border-radius: 2.8px;
             height: 94px; /* 高度减小6px：从100px改为94px */
-            position: relative;
-            overflow: hidden;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            width: 100%; /* grid布局中自动填充 */
-        }
-        
-        .hero-orange-block-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* 改为cover，铺满橙色块 */
-            object-position: center;
-            border-radius: 2.8px;
         }
 
         .hero-tag {
@@ -709,18 +628,7 @@
             padding: 4.5px 9px; /* 缩小四分之一：6px 12px -> 4.5px 9px */
             border-radius: 4.2px; /* 缩小四分之一：5.6px * 0.75 = 4.2px */
             box-shadow: 0 1.5px 6px rgba(255, 215, 0, 0.3); /* 缩小四分之一 */
-            z-index: 102; /* 确保按钮在图片上方 */
-        }
-        
-        #hero-banner-img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* 改为contain，按比例缩放，不裁剪 */
-            object-position: center;
-            z-index: 1;
+            z-index: 101;
         }
 
         .hero i {
@@ -730,73 +638,21 @@
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3px; /* 间距改为3px，与橙色块间距保持一致 */
+            gap: 3px;
             padding: 0 0 20px;
-            margin: 0; /* 紧贴header底部，无间距 */
-            margin-top: 3px; /* 与上方最后一个橙色块容器的间距保持一致 */
+            margin: -4px 0 0 0; /* 向上移动4px */
+            /* 与上方橙色块间距由.hero-orange-blocks的margin-bottom控制 */
             width: 100%;
             box-sizing: border-box;
-            /* 紧贴状态栏：header高度约56px（padding 12px*2 + 内容32px），grid-2直接跟在header后面 */
         }
 
         /* Responsive fixes for small screens to avoid layout/border distortion */
         @media (max-width: 480px) {
             .page {
                 padding: 0 !important;
-                margin: 0 auto !important; /* 保持居中 */
+                margin: 0 !important;
                 max-width: 100% !important;
                 width: 100% !important;
-                min-height: auto !important; /* 避免高度问题 */
-                overflow: visible !important; /* 确保内容可见 */
-            }
-            
-            /* 确保页面容器可以正常滚动 */
-            .page-container {
-                touch-action: pan-y; /* 允许垂直滑动 */
-                -webkit-overflow-scrolling: touch;
-                overflow-y: auto !important; /* 确保可以滚动 */
-                overflow-x: hidden !important;
-                height: 100% !important;
-            }
-            
-            /* 确保首页内容完整显示 */
-            #page-home {
-                min-height: auto !important;
-                overflow: visible !important;
-                padding-bottom: 0 !important;
-                position: relative !important;
-                z-index: 1 !important;
-            }
-            
-            /* 确保hero-green-bar-container可见 */
-            .hero-green-bar-container {
-                position: relative !important;
-                z-index: 1 !important;
-                display: block !important;
-                visibility: visible !important;
-            }
-            
-            /* 确保所有橙色块容器可见 */
-            .hero-orange-blocks {
-                position: relative !important;
-                z-index: 1 !important;
-            }
-            
-            /* 确保优惠券文字可见 */
-            .hero-coupon-text {
-                position: relative !important;
-                z-index: 1 !important;
-            }
-            
-            /* 确保产品网格可见 */
-            #home-prod {
-                display: grid !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                position: relative !important;
-                z-index: 1 !important;
-                margin-top: 0 !important;
-                padding-top: 0 !important;
             }
             
             .hero {
@@ -808,8 +664,6 @@
                 border-radius: 0;
                 width: 100%;
                 box-sizing: border-box;
-                /* 紧贴header底部，无间距：header高度 = padding(12px*2) + 内容高度(约32px) = 56px */
-                top: calc(env(safe-area-inset-top) + 56px); /* 状态栏高度 + header高度，无间距 */
             }
 
             .hero-white-bar {
@@ -832,20 +686,8 @@
                 width: 100% !important;
             }
 
-            /* 移动端：hero-green-bar紧贴header */
-            .hero-green-bar-container {
-                margin: 0;
-                padding: 0;
-                /* 移动端：移除负margin，避免内容被推出视口 */
-                margin-top: 0;
-                position: relative;
-                width: 100%;
-                box-sizing: border-box;
-            }
-
             .hero-green-bar {
-                position: relative;
-                top: 0;
+                top: 120px;
                 height: 36px;
                 background: #1C1C1C;
                 border-radius: 0;
@@ -860,103 +702,19 @@
                 left: 0 !important;
                 right: 0 !important;
                 width: 100% !important;
-                margin: 0;
-                padding: 0;
             }
 
             /* 移动端橙色块样式 */
             .hero-orange-blocks {
-                display: grid;
-                grid-template-columns: repeat(4, 1fr); /* 默认每行4个 */
-                margin-top: 0; /* 紧贴hero-green-bar，无间距 */
-                margin-bottom: 3px; /* 两行橙色块之间的间距 */
+                margin-top: 48px; /* hero-green-bar的高度(36px) + 向下移动12px */
+                margin-bottom: 12px; /* 与下方产品块的间距 */
                 gap: 3px;
                 height: 94px; /* 高度减小6px：从100px改为94px */
-                width: 100%;
-                box-sizing: border-box;
-            }
-            
-            /* 移动端第二层橙色块容器 */
-            #hero-featured-blocks-2 {
-                margin-top: 0; /* 紧贴第一层橙色块 */
-                margin-bottom: 8px; /* 与下方优惠券文字的间距 */
-            }
-            
-            /* 移动端优惠券文字提示 */
-            .hero-coupon-text {
-                font-size: 1.05rem !important; /* 改为1.05rem，与hero-green-bar保持一致 */
-                padding: 6px 0;
-                width: 100% !important;
-                box-sizing: border-box;
-                display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                overflow: visible !important; /* 改为visible，确保不影响下方元素 */
-                text-overflow: clip; /* 改为clip，避免截断 */
-                white-space: nowrap;
-                font-weight: 600 !important; /* 确保字重一致 */
-            }
-            
-            /* 移动端：每行2个的橙色块容器 */
-            .hero-orange-blocks.two-columns {
-                display: grid !important; /* 确保在移动端显示 */
-                grid-template-columns: repeat(2, 1fr) !important; /* 每行2个 */
-                gap: 3px;
-                width: 100% !important;
-                height: 94px !important; /* 明确设置高度，与上方一致 */
-                box-sizing: border-box;
-                margin: 0 !important;
-                padding: 0 !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-            }
-            
-            /* 移动端：第三层橙色块容器 */
-            #hero-featured-blocks-3 {
-                display: grid !important;
-                margin-top: 0 !important; /* 紧贴优惠券文字 */
-                margin-bottom: 3px !important; /* 两行橙色块之间的间距 */
-                visibility: visible !important;
-                opacity: 1 !important;
-            }
-            
-            /* 移动端：第四层橙色块容器 */
-            #hero-featured-blocks-4 {
-                display: grid !important;
-                margin-top: 0 !important; /* 紧贴上一层橙色块 */
-                margin-bottom: 3px !important; /* 与下方产品块的间距改为3px，与橙色块间距保持一致 */
-                visibility: visible !important;
-                opacity: 1 !important;
-                position: relative !important;
-                z-index: 1 !important;
             }
 
             .hero-orange-block-item {
-                height: 94px !important; /* 高度减小6px：从100px改为94px */
+                height: 94px; /* 高度减小6px：从100px改为94px */
                 border-radius: 2.8px;
-                width: 100% !important;
-                display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                position: relative !important;
-            }
-            
-            /* 确保移动端图片可见并铺满橙色块 */
-            .hero-orange-block-item img {
-                display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                position: absolute !important; /* 改为absolute，确保完全覆盖 */
-                top: 0 !important;
-                left: 0 !important;
-                right: 0 !important;
-                bottom: 0 !important;
-                z-index: 1 !important;
-                width: 100% !important;
-                height: 100% !important;
-                object-fit: cover !important; /* 铺满橙色块 */
-                object-position: center !important;
-                border-radius: 2.8px !important;
             }
 
             .hero-tag {
@@ -991,13 +749,13 @@
                only collapse to one column on very narrow screens (<360px) */
             .grid-2 {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 3px; /* 间距改为3px，与橙色块间距保持一致 */
+                gap: 3px;
                 padding: 0 0 120px; /* 移除左右padding，确保靠边对齐 */
-                margin: 0; /* 紧贴header底部，无间距 */
-                margin-top: 3px; /* 与上方最后一个橙色块容器的间距保持一致 */
+                margin: -4px 0 0 0; /* 向上移动4px */
                 width: 100%;
                 box-sizing: border-box;
                 /* 增加底部padding，确保产品完整显示，不被底部导航遮挡 */
+                /* 与上方橙色块间距由.hero-orange-blocks的margin-bottom控制 */
             }
 
             .home-card {
@@ -1011,37 +769,8 @@
 
             .home-card .card-img {
                 border-radius: 3.4px;
-                height: 120px !important; /* 移动端也保持固定高度 */
-                width: 100% !important;
-                display: block !important; /* 覆盖通用.card-img的flex布局 */
-                align-items: unset !important;
-                justify-content: unset !important;
-                aspect-ratio: unset !important;
-                position: relative !important;
-                overflow: hidden !important;
-            }
-
-            /* 移动端首页图片样式 - 确保铺满占位框 */
-            .home-card .card-img img {
-                width: 100% !important;
-                height: 100% !important;
-                max-width: 100% !important;
-                max-height: 100% !important;
-                min-width: 100% !important;
-                min-height: 100% !important;
-                object-fit: cover !important; /* 铺满占位框 */
-                object-position: center !important;
-                position: absolute !important;
-                top: 0 !important;
-                left: 0 !important;
-                right: 0 !important;
-                bottom: 0 !important;
-                display: block !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                border: none !important;
-                box-sizing: border-box !important;
-                z-index: 10 !important;
+                height: 120px; /* 移动端也保持固定高度 */
+                width: 100%;
             }
 
             .home-card .card-img i {
@@ -1359,17 +1088,13 @@
         .home-card .card-img {
             background: #E0E0E0 !important;
             border-radius: 2.8px;
-            width: 100% !important;
-            height: 120px !important; /* 固定高度，确保高度不变 */
-            border: none !important;
-            position: relative !important;
-            overflow: hidden !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            display: block !important; /* 覆盖通用.card-img的flex布局 */
-            align-items: unset !important;
-            justify-content: unset !important;
-            aspect-ratio: unset !important; /* 覆盖通用样式的aspect-ratio */
+            width: 100%;
+            height: 120px; /* 固定高度，确保高度不变 */
+            border: none;
+            position: relative;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
             /* 防止重影和渲染问题 */
             -webkit-transform: translateZ(0);
             transform: translateZ(0);
@@ -1378,15 +1103,11 @@
             isolation: isolate; /* 创建新的层叠上下文，防止重叠 */
         }
 
-        /* 图片样式 - 铺满占位框，防止重影 */
+        /* 图片样式 - 完整显示，不裁剪，防止重影 */
         .home-card .card-img img {
             width: 100% !important;
             height: 100% !important;
-            max-width: 100% !important;
-            max-height: 100% !important;
-            min-width: 100% !important;
-            min-height: 100% !important;
-            object-fit: cover !important; /* 改为cover，铺满占位框 */
+            object-fit: contain !important; /* 改为contain，完整显示图片 */
             object-position: center !important;
             position: absolute !important;
             top: 0 !important;
@@ -1396,8 +1117,6 @@
             display: block !important;
             margin: 0 !important;
             padding: 0 !important;
-            border: none !important;
-            box-sizing: border-box !important;
             z-index: 10 !important; /* 确保图片在图标上方 */
             /* 防止重影和渲染问题 */
             image-rendering: -webkit-optimize-contrast; /* Safari */
@@ -1950,7 +1669,7 @@
         .shop-item-img {
             width: 100% !important;
             height: 100% !important;
-            object-fit: cover !important; /* 改为cover，铺满占位框 */
+            object-fit: contain !important; /* 改为contain，完整显示图片，不裁剪 */
             object-position: center;
             display: block !important;
             position: absolute !important;
@@ -1993,7 +1712,7 @@
             .shop-item-img {
                 width: 100% !important;
                 height: 100% !important;
-                object-fit: cover !important; /* 改为cover，铺满占位框 */
+                object-fit: contain !important; /* 改为contain，完整显示图片 */
                 object-position: center;
                 display: block;
                 position: absolute;
@@ -2474,18 +2193,13 @@
         .pt-item {
             background: var(--item-bg);
             border-radius: 4px;
-            overflow: visible; /* 改为visible，确保收藏图标不被裁剪 */
+            overflow: hidden;
             aspect-ratio: 1;
             position: relative;
             display: flex;
             flex-direction: column;
             border: 1px solid rgba(28, 28, 28, 0.12);
             transition: box-shadow 0.2s ease;
-        }
-        
-        /* 确保pt-img区域不遮挡收藏图标 */
-        .pt-img {
-            overflow: hidden; /* pt-img保持hidden，但收藏图标在pt-item层级 */
         }
         
         .pt-item:hover {
@@ -2510,11 +2224,6 @@
             z-index: 2;
         }
 
-        /* 当有收藏图标时，选择圆圈下移 */
-        .pt-item.has-fav .pt-check {
-            top: 30px;
-        }
-
         .pt-item.sel {
             border: 2px solid var(--accent);
         }
@@ -2533,42 +2242,6 @@
             font-weight: 900;
             color: #fff;
             font-size: 10px;
-        }
-
-        /* 收藏图标样式 */
-        .pt-fav {
-            position: absolute !important;
-            top: 6px !important;
-            right: 6px !important;
-            width: 22px !important;
-            height: 22px !important;
-            border-radius: 50% !important;
-            background: #FFA500 !important;
-            border: 2px solid #FFA500 !important;
-            z-index: 100 !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            pointer-events: none !important;
-        }
-
-        .pt-fav i {
-            color: #fff !important;
-            font-size: 11px !important;
-            display: block !important;
-            line-height: 1 !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-        
-        /* 确保收藏图标在所有情况下都可见 */
-        .pt-item .pt-fav {
-            display: flex !important;
-            visibility: visible !important;
-            opacity: 1 !important;
         }
 
         .pt-img {
@@ -3548,33 +3221,18 @@
                     <div class="badge b-bal"><i class="fas fa-wallet"></i> <span class="v-bal">¥0</span></div>
                 </div>
             </header>
-            <!-- 保留KOKOmall商城强力推荐和四个橙色块，删除hero横幅区域 -->
-            <div class="hero-green-bar-container">
+            <div class="hero">
+                <div class="hero-white-bar"></div>
+                <div class="hero-black-bar-on-white"></div>
                 <div class="hero-green-bar">·      KOKOmall商城强力推荐      ·</div>
+                <div class="hero-tag">KOKOmall精选</div>
+                <i class="fas fa-truck-pickup"></i>
             </div>
-            <div class="hero-orange-blocks" id="hero-featured-blocks">
-                <div class="hero-orange-block-item"><img src="" alt="精选商品1" loading="lazy" onerror="this.style.display='none';"></div>
-                <div class="hero-orange-block-item"><img src="" alt="精选商品2" loading="lazy" onerror="this.style.display='none';"></div>
-                <div class="hero-orange-block-item"><img src="" alt="精选商品3" loading="lazy" onerror="this.style.display='none';"></div>
-                <div class="hero-orange-block-item"><img src="" alt="精选商品4" loading="lazy" onerror="this.style.display='none';"></div>
-            </div>
-            <div class="hero-orange-blocks" id="hero-featured-blocks-2">
-                <div class="hero-orange-block-item"><img src="" alt="精选商品5" loading="lazy" onerror="this.style.display='none';"></div>
-                <div class="hero-orange-block-item"><img src="" alt="精选商品6" loading="lazy" onerror="this.style.display='none';"></div>
-                <div class="hero-orange-block-item"><img src="" alt="精选商品7" loading="lazy" onerror="this.style.display='none';"></div>
-                <div class="hero-orange-block-item"><img src="" alt="精选商品8" loading="lazy" onerror="this.style.display='none';"></div>
-            </div>
-            <!-- 优惠券文字提示 -->
-            <div class="hero-coupon-text">·   KOKOmall商城优惠券天天抢   ·</div>
-            <!-- 第三行：2个大块 -->
-            <div class="hero-orange-blocks two-columns" id="hero-featured-blocks-3">
-                <div class="hero-orange-block-item"><img src="" alt="精选商品9" loading="lazy" onerror="this.style.display='none';"></div>
-                <div class="hero-orange-block-item"><img src="" alt="精选商品10" loading="lazy" onerror="this.style.display='none';"></div>
-            </div>
-            <!-- 第四行：2个大块 -->
-            <div class="hero-orange-blocks two-columns" id="hero-featured-blocks-4">
-                <div class="hero-orange-block-item"><img src="" alt="精选商品11" loading="lazy" onerror="this.style.display='none';"></div>
-                <div class="hero-orange-block-item"><img src="" alt="精选商品12" loading="lazy" onerror="this.style.display='none';"></div>
+            <div class="hero-orange-blocks">
+                <div class="hero-orange-block-item"></div>
+                <div class="hero-orange-block-item"></div>
+                <div class="hero-orange-block-item"></div>
+                <div class="hero-orange-block-item"></div>
             </div>
             <div class="grid-2" id="home-prod"></div>
         </div>
@@ -4561,6 +4219,7 @@
     <div id="toast" class="toast">Msg</div>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
+        window.onerror = function(msg, url, line, col, err) { try { console.error('Uncaught:', msg, url, line, col, err && err.stack); } catch (e) {} return true; };
         const App = (function () {
             const S = { val: 0, pts: 0, ord: 0, favs: [], u: null, sel: new Set(), ptsSel: new Set(), favSel: new Set(), rec: { l: [], o: [], p: [], r: [] }, activeItem: null, unit: 10, gridSize: 64, searchHist: [], address: null, location: { lat: null, lng: null, address: null }, selectedPaymentMethod: null };
             const PD = [
@@ -5790,21 +5449,24 @@
             
             // 监听产品更新事件
             window.addEventListener('productsUpdated', function(event) {
-                if (event.detail) {
-                    Object.keys(event.detail).forEach(key => {
+                try {
+                    if (!event || !event.detail) return;
+                    Object.keys(event.detail).forEach(function(key) {
                         if (event.detail[key] && Array.isArray(event.detail[key])) {
                             SD[key] = event.detail[key];
                         }
                     });
-                    // 重新渲染相关页面
                     renderHome();
                     renderCats();
                     const currentCategory = document.querySelector('.cat-btn.active');
                     if (currentCategory) {
-                        const match = currentCategory.getAttribute('onclick').match(/'([^']+)'/);
-                        if (match) renderShop(match[1]);
+                        const onclick = currentCategory.getAttribute && currentCategory.getAttribute('onclick');
+                        if (onclick) {
+                            const match = onclick.match(/'([^']+)'/);
+                            if (match) renderShop(match[1]);
+                        }
                     }
-                }
+                } catch (e) { console.warn('productsUpdated', e); }
             });
             
             function init() { 
@@ -5965,16 +5627,9 @@
                 // Clear container
                 imgContainer.innerHTML = '';
                 
-                // 获取图片路径
-                const imagePath = getProductImagePath(item, 'shop'); // 产品详情页使用商城页图片
+                // 不显示商品图片，仅显示图标
                 const safeIcon = escapeHtml(item.i || 'fa-box');
-                
-                // 如果有图片，显示图片并隐藏图标；否则只显示图标
-                if (imagePath) {
-                    imgContainer.innerHTML = `<img src="${escapeHtml(imagePath)}" alt="${escapeHtml(item.n || '')}" onload="this.nextElementSibling.classList.add('img-hidden'); this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('img-hidden'); this.nextElementSibling.style.display='block';" style="max-width:100%; max-height:200px; object-fit:contain; border-radius:4px;z-index:10;"><i class="fas ${safeIcon} img-hidden" style="font-size:4rem; color:var(--accent); z-index:1; display:none;"></i>`;
-                } else {
-                    imgContainer.innerHTML = `<i class="fas ${safeIcon}" style="font-size:4rem; color:var(--accent);"></i>`;
-                }
+                imgContainer.innerHTML = `<i class="fas ${safeIcon}" style="font-size:4rem; color:var(--accent);"></i>`;
                 
                 document.getElementById('product-info-brand').textContent = item.b || 'Brand';
                 document.getElementById('product-info-name').textContent = item.n || '--';
@@ -6022,12 +5677,9 @@
                 try {
                     sessionStorage.setItem('koko_has_selected_product', 'true');
                 } catch (e) {}
-                // 获取图片路径，如果有图片则显示图片，否则显示图标
-                const productImagePath = getProductImagePath(currentProductInfo, 'shop'); // KOKO页面使用商城页图片
+                // 不显示商品图片，仅显示图标
                 const safeIcon = escapeHtml(currentProductInfo.i || 'fa-box');
-                const imgHtml = productImagePath ? 
-                    `<img src="${escapeHtml(productImagePath)}" alt="${escapeHtml(currentProductInfo.n || '')}" onload="this.nextElementSibling.classList.add('img-hidden'); this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('img-hidden'); this.nextElementSibling.style.display='block';" style="max-width:60px; max-height:60px; object-fit:contain; border-radius:4px;z-index:10;"><i class="fas ${safeIcon} img-hidden" style="color:var(--accent); font-size:4rem; z-index:1; display:none;"></i>` :
-                    `<i class="fas ${safeIcon}" style="color:var(--accent); font-size:4rem;"></i>`;
+                const imgHtml = `<i class="fas ${safeIcon}" style="color:var(--accent); font-size:4rem;"></i>`;
                 // 创建商品信息容器，保留emptyHint元素
                 const productInfo = document.createElement('div');
                 productInfo.style.display = 'flex';
@@ -6213,10 +5865,13 @@
                     };
                     
                     updateStickyPositions();
+                    var stickyResizeTimer;
                     window.addEventListener('resize', function() {
-                        updateStickyPositions();
-                        alignActsContainer();
-                        alignPtsFoot();
+                        if (stickyResizeTimer) clearTimeout(stickyResizeTimer);
+                        stickyResizeTimer = setTimeout(function() {
+                            stickyResizeTimer = null;
+                            try { updateStickyPositions(); alignActsContainer(); alignPtsFoot(); } catch (e) { console.warn('resize sticky', e); }
+                        }, 150);
                     });
                 } else if (gameButtons) {
                     gameButtons.style.display = 'none';
@@ -6916,79 +6571,17 @@
             let ptsDisplayedCount = 0;
             let ptsProductViewTimes = new Map();
             
-            // 从所有商城分类中收集产品，用于积分页面
-            function getAllShopProducts() {
-                const allProducts = [];
-                for (const category in SD) {
-                    const shopProducts = SD[category];
-                    if (Array.isArray(shopProducts)) {
-                        // 将商城产品转换为积分页格式，保留所有原始字段
-                        shopProducts.forEach((sp, index) => {
-                            allProducts.push({
-                                id: `shop_${category}_${index}`,
-                                n: sp.n,
-                                p: sp.p, // 使用商城价格作为积分
-                                i: sp.i || 'fa-box',
-                                b: sp.b || '',
-                                img: sp.img || '', // 保留img字段
-                                t: sp.t || '', // 保留t字段
-                                lg: false // 默认不是大图
-                            });
-                        });
-                    }
-                }
-                return allProducts;
-            }
-            
-            // 过滤掉没有图片的产品（通过预检查图片是否存在）
-            function filterProductsWithImages(products) {
-                return products.filter(product => {
-                    // 如果有img属性，直接使用
-                    if (product.img) {
-                        return true;
-                    }
-                    
-                    // 生成图片路径
-                    const imagePath = getProductImagePath(product, 'shop');
-                    if (!imagePath) {
-                        return false; // 没有生成路径，过滤掉
-                    }
-                    
-                    // 对于MacBook，我们无法在客户端预检查文件是否存在
-                    // 所以先保留所有产品，让浏览器通过onerror处理
-                    // 但我们可以通过检查路径是否合理来初步过滤
-                    const brand = (product.b || '').trim();
-                    const name = (product.n || '').trim();
-                    
-                    // 如果品牌和名称都为空，过滤掉
-                    if (!brand && !name) {
-                        return false;
-                    }
-                    
-                    return true; // 保留产品，让浏览器加载时判断
-                });
-            }
-            
             function renderPts() { 
                 const c = document.getElementById('pts-items'); 
                 if (!c) return;
                 
                 c.innerHTML = '';
-                // 使用商城页面的所有产品作为积分页产品
-                let allProducts = getAllShopProducts();
-                
-                // 过滤掉明显无效的产品（品牌和名称都为空）
-                allPtsProducts = allProducts.filter(p => {
-                    const brand = (p.b || '').trim();
-                    const name = (p.n || '').trim();
-                    return brand || name; // 至少要有品牌或名称
-                });
-                
+                allPtsProducts = PD; // 保存所有积分产品
                 ptsDisplayedCount = 0;
                 ptsProductViewTimes.clear();
                 
                 // 初始显示所有产品
-                appendPtsProducts(allPtsProducts.length, true);
+                appendPtsProducts(PD.length, true);
                 setupPtsScrollListener();
             }
             
@@ -7052,45 +6645,14 @@
                     d.onclick = () => togPt(p.id, d); 
                     const safeIcon = escapeHtml(p.i);
                     const safeName = p.lg ? escapeHtml(p.n.substring(0, 2)) : '';
-                    // 自动获取图片路径（积分页使用商城页图片，即product-images-shop文件夹）
-                    // 直接传入完整的产品对象，与商城页面保持一致
-                    const imagePath = getProductImagePath(p, 'shop');
-                    
+                    // 不显示商品图片，仅使用图标
                     const productKey = p.id;
                     if (!ptsProductViewTimes.has(productKey)) {
                         ptsProductViewTimes.set(productKey, Date.now());
                     }
+                    const imgContent = `<i class="fas ${safeIcon}" style="font-size:2rem;color:#fff;margin-bottom:4px"></i>`;
                     
-                    // 如果有图片，使用img标签；否则使用图标
-                    // 如果图片加载失败，自动隐藏整个产品项（删除）
-                    const imgContent = imagePath ? 
-                        `<img src="${escapeHtml(imagePath)}" alt="${escapeHtml(p.n || '')}" onload="this.nextElementSibling.classList.add('img-hidden'); this.nextElementSibling.style.display='none';" onerror="console.warn('积分页图片加载失败，删除产品:', '${escapeHtml(imagePath)}', '产品:', '${escapeHtml(p.b || '')} ${escapeHtml(p.n || '')}'); const item = this.closest('.pt-item'); if(item) item.remove();" loading="lazy" style="width:100%;height:100%;object-fit:contain;object-position:center;border-radius:4px;z-index:10;"><i class="fas ${safeIcon} img-hidden" style="font-size:2rem;color:#fff;margin-bottom:4px;z-index:1;display:none;"></i>` :
-                        `<i class="fas ${safeIcon}" style="font-size:2rem;color:#fff;margin-bottom:4px"></i>`;
-                    
-                    // 检查产品是否已收藏
-                    let isFav = false;
-                    try {
-                        if (typeof S !== 'undefined' && S && S.favs && Array.isArray(S.favs) && S.favs.length > 0) {
-                            isFav = S.favs.some(f => f && f.id === p.id);
-                        }
-                    } catch(e) {
-                        console.warn('检查收藏状态时出错:', e);
-                    }
-                    
-                    // 如果有收藏，添加has-fav类并显示收藏图标
-                    let favIcon = '';
-                    if (isFav) {
-                        d.className += ' has-fav';
-                        favIcon = '<div class="pt-fav"><i class="fas fa-star"></i></div>';
-                    }
-                    
-                    // 调试：在控制台输出收藏状态
-                    if (isFav) {
-                        console.log('产品已收藏:', p.id, p.n);
-                    }
-                    
-                    // 收藏图标放在最前面，确保显示在最上层
-                    d.innerHTML = `${favIcon}<div class="pt-check"></div><div class="pt-img">${imgContent}<span>${safeName}</span></div><div class="pt-info"><div class="pt-val"><i class="fas fa-coins" style="font-size:0.85rem; margin-right:4px; color:#fff;"></i>${escapeHtml(p.p)} 积分</div></div>`; 
+                    d.innerHTML = `<div class="pt-check"></div><div class="pt-img">${imgContent}<span>${safeName}</span></div><div class="pt-info"><div class="pt-val"><i class="fas fa-coins" style="font-size:0.85rem; margin-right:4px; color:#fff;"></i>${escapeHtml(p.p)} 积分</div></div>`; 
                     c.appendChild(d); 
                 }); 
                 
@@ -7145,27 +6707,32 @@
                     pageContainer.removeEventListener('scroll', pageContainer.ptsScrollHandler);
                 }
                 
+                let ptsScrollTicking = false;
                 pageContainer.ptsScrollHandler = function() {
-                    // 检查是否在积分页面
                     const ptsPage = document.getElementById('page-points');
                     if (!ptsPage || !ptsPage.classList.contains('active')) return;
-                    
                     if (isLoading) return;
-                    
                     const scrollTop = pageContainer.scrollTop;
                     const scrollHeight = pageContainer.scrollHeight;
                     const clientHeight = pageContainer.clientHeight;
-                    
-                    if (scrollTop > lastScrollTop && scrollHeight - scrollTop - clientHeight < 200) {
-                        isLoading = true;
-                        const productsToAdd = Math.min(30, allPtsProducts.length);
-                        appendPtsProducts(productsToAdd);
-                        setTimeout(() => {
-                            isLoading = false;
-                        }, 300);
-                    }
-                    
                     lastScrollTop = scrollTop;
+                    if (ptsScrollTicking) return;
+                    ptsScrollTicking = true;
+                    requestAnimationFrame(function() {
+                        ptsScrollTicking = false;
+                        const pp = document.getElementById('page-points');
+                        if (!pp || !pp.classList.contains('active')) return;
+                        const pc = document.querySelector('.page-container');
+                        if (!pc) return;
+                        const st = pc.scrollTop, sh = pc.scrollHeight, ch = pc.clientHeight;
+                        if (sh - st - ch >= 200 || st <= lastScrollTop - 5) return;
+                        isLoading = true;
+                        try {
+                            const productsToAdd = Math.min(30, allPtsProducts.length);
+                            appendPtsProducts(productsToAdd);
+                        } catch (e) { console.warn('appendPtsProducts', e); }
+                        setTimeout(function() { isLoading = false; }, 300);
+                    });
                 };
                 
                 pageContainer.addEventListener('scroll', pageContainer.ptsScrollHandler, { passive: true });
@@ -7239,23 +6806,11 @@
                 if (S.ptsSel.size === 0) return msg('请选择商品');
                 PD.forEach(p => {
                     if (S.ptsSel.has(p.id)) {
-                        if (!S.favs.some(f => f.id === p.id)) { 
-                            S.favs.push({ id: p.id, n: p.n, p: p.p, i: p.i }); 
-                        }
+                        if (!S.favs.some(f => f.id === p.id)) { S.favs.push({ id: p.id, n: p.n, p: p.p, i: p.i }); }
                     }
                 });
-                S.ptsSel.clear(); 
-                document.querySelectorAll('.pt-item').forEach(e => e.classList.remove('sel'));
-                msg(`已收藏 ${S.favs.length} 件商品`); 
-                // 重新渲染积分页面以显示收藏图标
-                const pointsPage = document.getElementById('page-points');
-                if (pointsPage && pointsPage.classList.contains('active')) {
-                    // 延迟一下确保状态更新
-                    setTimeout(() => {
-                        renderPts();
-                    }, 100);
-                }
-                upd();
+                S.ptsSel.clear(); document.querySelectorAll('.pt-item').forEach(e => e.classList.remove('sel'));
+                msg(`已收藏 ${S.favs.length} 件商品`); upd();
             }
 
             function openFavs() { S.favSel.clear(); renderFavs(); document.getElementById('modal-favs').style.display = 'flex'; }
@@ -7314,6 +6869,21 @@
                 // 处理空值
                 if (!brand && !name) return '';
                 
+                // 生成产品ID：品牌_名称，转换为小写，移除特殊字符
+                let productId = '';
+                if (brand && name) {
+                    productId = (brand + '_' + name).toLowerCase();
+                } else if (brand) {
+                    productId = brand.toLowerCase();
+                } else if (name) {
+                    productId = name.toLowerCase();
+                }
+                
+                // 移除特殊字符和多余空格（包括单引号、井号、度号等）
+                productId = productId.replace(/[<>:"/\\|?*'#°]/g, '').replace(/\s+/g, '_').replace(/_{2,}/g, '_').replace(/^_|_$/g, '');
+                
+                if (!productId) return '';
+                
                 // 根据页面类型选择不同的图片文件夹
                 // pageType: 'home' | 'points' | 'shop' | null (自动检测)
                 let folder = 'product-images'; // 默认文件夹（向后兼容）
@@ -7323,7 +6893,7 @@
                     if (pageType === 'home') {
                         folder = 'product-images-home'; // 首页：600×252
                     } else if (pageType === 'points') {
-                        folder = 'product-images-shop'; // 积分页使用商城页图片（与商城页相同）
+                        folder = 'product-images-points'; // 积分页：600×600
                     } else if (pageType === 'shop') {
                         folder = 'product-images-shop'; // 商城页：600×472
                     }
@@ -7334,38 +6904,12 @@
                         if (currentPage.id === 'page-home') {
                             folder = 'product-images-home';
                         } else if (currentPage.id === 'page-points') {
-                            folder = 'product-images-shop'; // 积分页使用商城页图片（与商城页相同）
+                            folder = 'product-images-points';
                         } else if (currentPage.id === 'page-shop') {
                             folder = 'product-images-shop';
                         }
                     }
                 }
-                
-                // 生成产品ID：品牌_名称，转换为小写，移除特殊字符
-                let productId = '';
-                if (brand && name) {
-                    productId = (brand + '_' + name).toLowerCase();
-                } else if (brand) {
-                    productId = brand.toLowerCase();
-                } else if (name) {
-                    // 积分页面产品没有品牌，只使用名称
-                    // 尝试匹配商城页面中名称包含该关键词的图片
-                    productId = name.toLowerCase();
-                }
-                
-                // 移除特殊字符和多余空格（包括单引号、井号、度号、括号、加号等）
-                // 先处理括号和加号，再处理其他特殊字符
-                productId = productId
-                    .replace(/[()]/g, '') // 移除括号
-                    .replace(/\+/g, '') // 移除加号
-                    .replace(/&/g, '') // 移除&符号
-                    .replace(/[<>:"/\\|?*'#°]/g, '') // 移除其他特殊字符
-                    .replace(/\s+/g, '_') // 空格替换为下划线
-                    .replace(/_{2,}/g, '_') // 多个下划线合并为一个
-                    .replace(/^_|_$/g, '') // 移除首尾下划线
-                    .trim(); // 移除首尾空格
-                
-                if (!productId) return '';
                 
                 // 支持的图片格式（按优先级排序）
                 // 浏览器会通过onerror事件处理加载失败，自动回退到默认图标
@@ -7401,122 +6945,19 @@
             let homeDisplayedCount = 0;
             let homeProductViewTimes = new Map(); // 记录每个产品的显示时间
             
-            // 加载首页精选区域的图片（12个橙色块：前2行每行4个，后2行每行2个）
-            function loadHeroFeaturedImages() {
-                // 加载所有12个橙色块图片
-                const heroImages = document.querySelectorAll('.hero-orange-block-item img');
-                const imageFiles = [
-                    'hero-featured-1.jpg', 'hero-featured-2.jpg', 'hero-featured-3.jpg', 'hero-featured-4.jpg',
-                    'hero-featured-5.jpg', 'hero-featured-6.jpg', 'hero-featured-7.jpg', 'hero-featured-8.jpg',
-                    'hero-featured-9.jpg', 'hero-featured-10.jpg', 'hero-featured-11.jpg', 'hero-featured-12.jpg'
-                ];
-                
-                // 检测是否在Android WebView环境中
-                const isAndroidWebView = window.location.protocol === 'file:' && 
-                                        (navigator.userAgent.indexOf('Android') !== -1 || 
-                                         navigator.userAgent.indexOf('KOKOMallApp') !== -1 ||
-                                         window.location.href.indexOf('android_asset') !== -1);
-                
-                console.log('开始加载首页精选图片，共找到', heroImages.length, '个图片元素');
-                console.log('是否在Android WebView中:', isAndroidWebView);
-                console.log('当前URL:', window.location.href);
-                console.log('User Agent:', navigator.userAgent);
-                
-                heroImages.forEach((img, index) => {
-                    if (index < imageFiles.length) {
-                        // 根据环境选择路径
-                        let imgPath;
-                        if (isAndroidWebView) {
-                            // Android WebView中使用绝对路径
-                            imgPath = `file:///android_asset/hero-featured-images/${imageFiles[index]}`;
-                        } else {
-                            // 浏览器中使用相对路径
-                            imgPath = `hero-featured-images/${imageFiles[index]}`;
-                        }
-                        
-                        // 确保图片元素可见
-                        img.style.display = 'block';
-                        img.style.visibility = 'visible';
-                        img.style.opacity = '1';
-                        img.style.width = '100%';
-                        img.style.height = '100%';
-                        
-                        img.alt = `精选商品 ${index + 1}`;
-                        
-                        // 尝试加载图片
-                        const tryLoadImage = (path, attempt = 1) => {
-                            console.log(`设置图片 ${index + 1} (尝试 ${attempt}):`, path);
-                            img.src = path;
-                            
-                            img.onload = function() {
-                                console.log('✅ 图片加载成功:', path, '索引:', index);
-                                // 确保父容器也可见
-                                const parent = this.parentElement;
-                                if (parent) {
-                                    parent.style.display = 'block';
-                                    parent.style.visibility = 'visible';
-                                    parent.style.opacity = '1';
-                                }
-                            };
-                            
-                            img.onerror = function() {
-                                // 如果主路径失败，尝试备用路径
-                                if (attempt === 1 && isAndroidWebView) {
-                                    // 尝试相对路径
-                                    const fallbackPath = `hero-featured-images/${imageFiles[index]}`;
-                                    console.warn('主路径失败，尝试备用路径:', fallbackPath);
-                                    tryLoadImage(fallbackPath, 2);
-                                } else if (attempt === 2 && isAndroidWebView) {
-                                    // 尝试另一个路径格式
-                                    const fallbackPath2 = `./hero-featured-images/${imageFiles[index]}`;
-                                    console.warn('备用路径1失败，尝试备用路径2:', fallbackPath2);
-                                    tryLoadImage(fallbackPath2, 3);
-                                } else {
-                                    // 所有路径都失败，隐藏图片，保持橙色背景
-                                    console.warn('❌ 首页精选图片加载失败（所有路径）:', path, '索引:', index);
-                                    this.style.display = 'none';
-                                    const parent = this.parentElement;
-                                    if (parent) {
-                                        parent.style.background = 'var(--primary)';
-                                        parent.style.display = 'block'; // 确保容器仍然显示
-                                        parent.style.visibility = 'visible';
-                                        parent.style.opacity = '1';
-                                    }
-                                }
-                            };
-                        };
-                        
-                        // 开始加载图片
-                        tryLoadImage(imgPath);
-                    }
-                });
-                
-                // 确保所有容器可见（特别是移动端）
-                const containers = document.querySelectorAll('.hero-orange-blocks.two-columns');
-                containers.forEach((container, idx) => {
-                    container.style.display = 'grid';
-                    container.style.visibility = 'visible';
-                    container.style.opacity = '1';
-                    console.log('确保容器可见:', container.id || 'container-' + idx);
-                });
-            }
-            
             function renderHome() {
-                const c = document.getElementById('home-prod');
-                // Use all products from SD (Shop Data) - combine all categories
-                let all = [];
-                Object.values(SD).forEach(arr => all = all.concat(arr));
-                all.sort(() => 0.5 - Math.random());
-                allHomeProducts = all; // 保存所有产品
-                homeDisplayedCount = 0;
-                homeProductViewTimes.clear();
-                
-                // 加载首页精选区域的图片（8个橙色块：两行，每行4个）
-                loadHeroFeaturedImages();
-                
-                // 初始显示100个产品
-                appendHomeProducts(100);
-                setupHomeScrollListener();
+                try {
+                    const c = document.getElementById('home-prod');
+                    if (!c) return;
+                    var all = [];
+                    Object.keys(SD).forEach(function(k) { if (SD[k] && Array.isArray(SD[k])) all = all.concat(SD[k]); });
+                    all.sort(function() { return 0.5 - Math.random(); });
+                    allHomeProducts = all;
+                    homeDisplayedCount = 0;
+                    homeProductViewTimes.clear();
+                    appendHomeProducts(100);
+                    setupHomeScrollListener();
+                } catch (e) { console.warn('renderHome', e); }
             }
             
             function appendHomeProducts(count) {
@@ -7557,39 +6998,26 @@
                     }
                 }
                 
-                let h = '';
-                productsToShow.forEach(i => {
-                    const icon = escapeHtml(i.i || 'fa-box');
-                    const itemJson = JSON.stringify(i).replace(/"/g, '&quot;');
-                    const productInfo = getProductInfo(i);
-                    const safeName = escapeJsString(i.n || '');
-                    const safeIcon = escapeJsString(icon);
-                    // 自动获取图片路径（优先使用已有img，否则从product-images-home文件夹查找）
-                    const imagePath = getProductImagePath(i, 'home');
-                    const safeImg = escapeJsString(imagePath);
-                    
-                    // 记录显示时间
-                    const productKey = i.id || i.n;
-                    if (!homeProductViewTimes.has(productKey)) {
-                        homeProductViewTimes.set(productKey, Date.now());
-                    }
-                    
-                    // 如果图片加载失败，自动删除整个产品卡片（与积分页面一致）
-                    h += `<div class="card home-card" data-product-id="${productKey}" onclick="App.showProductInfo(${itemJson})">
-                <div class="card-img">${safeImg ? `<img src="${safeImg}" alt="${safeName}" onload="this.nextElementSibling.classList.add('img-hidden'); this.nextElementSibling.style.display='none';" onerror="console.warn('首页图片加载失败，删除产品:', '${safeImg}', '产品:', '${escapeJsString(i.b || '')} ${safeName}'); const card = this.closest('.home-card'); if(card) card.remove();" loading="lazy" style="width:100% !important; height:100% !important; max-width:100% !important; max-height:100% !important; min-width:100% !important; min-height:100% !important; object-fit:cover !important; object-position:center; position:absolute; top:0; left:0; right:0; bottom:0; display:block; margin:0; padding:0; border:none; box-sizing:border-box; z-index:10;">` : ''}<i class="fas ${icon} ${safeImg ? 'img-hidden' : ''}" style="font-size:3rem; color:var(--accent); z-index:1; ${safeImg ? 'display:none;' : ''}"></i></div>
-                <div class="card-desc">
-                    <div class="card-desc-text">${escapeHtml(productInfo.desc)}</div>
-                    <div class="card-desc-rating">推荐指数: ${productInfo.starsHtml} ${productInfo.rating.toFixed(1)}</div>
-                </div>
-                <div class="card-foot">
-                    <div class="foot-btns">
-                        <div class="f-btn fb-price" onclick="event.stopPropagation(); App.showProductInfo(${itemJson})">单价${escapeHtml(i.p)}</div>
-                        <div class="f-btn fb-koko" onclick="event.stopPropagation(); App.toLucky('${safeName}', ${i.p}, '${safeIcon}', '${safeImg}')">KOKO购</div>
-                    </div>
-                </div>
-            </div>`;
+                var h = '';
+                productsToShow.forEach(function(i) {
+                    try {
+                        if (!i || typeof i !== 'object') return;
+                        var icon = escapeHtml(i.i || 'fa-box');
+                        var itemJson;
+                        try { itemJson = JSON.stringify(i).replace(/"/g, '&quot;'); } catch (e) { return; }
+                        var productInfo = getProductInfo(i);
+                        var safeName = escapeJsString(i.n || '');
+                        var safeIcon = escapeJsString(icon);
+                        var productKey = (i.id != null ? i.id : i.n) || '';
+                        if (productKey && !homeProductViewTimes.has(productKey)) homeProductViewTimes.set(productKey, Date.now());
+                        var ratingStr = (productInfo.rating != null && typeof productInfo.rating.toFixed === 'function') ? productInfo.rating.toFixed(1) : '4.5';
+                        h += '<div class="card home-card" data-product-id="' + escapeHtml(String(productKey)) + '" onclick="App.showProductInfo(' + itemJson + ')">' +
+                            '<div class="card-img"><i class="fas ' + icon + '" style="font-size:3rem; color:var(--accent); z-index:1;"></i></div>' +
+                            '<div class="card-desc"><div class="card-desc-text">' + escapeHtml(productInfo.desc) + '</div><div class="card-desc-rating">推荐指数: ' + (productInfo.starsHtml || '') + ' ' + ratingStr + '</div></div>' +
+                            '<div class="card-foot"><div class="foot-btns"><div class="f-btn fb-price" onclick="event.stopPropagation(); App.showProductInfo(' + itemJson + ')">单价' + escapeHtml(i.p != null ? i.p : '') + '</div>' +
+                            '<div class="f-btn fb-koko" onclick="event.stopPropagation(); App.toLucky(\'' + safeName.replace(/'/g, "\\'") + '\', ' + (i.p != null ? i.p : 0) + ', \'' + safeIcon.replace(/'/g, "\\'") + '\', \'\')">KOKO购</div></div></div></div>';
+                    } catch (e) { console.warn('home card', e); }
                 });
-                
                 if (homeDisplayedCount === 0) {
                     c.innerHTML = h;
                 } else {
@@ -7602,33 +7030,37 @@
             function setupHomeScrollListener() {
                 const pageContainer = document.querySelector('.page-container');
                 if (!pageContainer) return;
-                
+                // 移除旧监听器，避免 renderHome 多次调用时重复绑定导致闪退/卡顿
+                if (pageContainer.homeScrollHandler) {
+                    pageContainer.removeEventListener('scroll', pageContainer.homeScrollHandler);
+                }
                 let isLoading = false;
                 let lastScrollTop = 0;
-                
-                pageContainer.addEventListener('scroll', function() {
+                let scrollTicking = false;
+                pageContainer.homeScrollHandler = function() {
                     if (isLoading) return;
-                    
                     const scrollTop = pageContainer.scrollTop;
                     const scrollHeight = pageContainer.scrollHeight;
                     const clientHeight = pageContainer.clientHeight;
-                    
-                    // 向下滚动且接近底部时（距离底部200px）
-                    if (scrollTop > lastScrollTop && scrollHeight - scrollTop - clientHeight < 200) {
-                        isLoading = true;
-                        
-                        // 追加产品：优先显示停留时间长的，然后循环显示所有产品
-                        const productsToAdd = Math.min(20, allHomeProducts.length);
-                        appendHomeProducts(productsToAdd);
-                        
-                        // 延迟重置加载状态，避免频繁触发
-                        setTimeout(() => {
-                            isLoading = false;
-                        }, 300);
-                    }
-                    
                     lastScrollTop = scrollTop;
-                }, { passive: true });
+                    if (scrollTicking) return;
+                    scrollTicking = true;
+                    requestAnimationFrame(function() {
+                        scrollTicking = false;
+                        const homePage = document.getElementById('page-home');
+                        if (!homePage || !homePage.classList.contains('active')) return;
+                        const pc = document.querySelector('.page-container');
+                        if (!pc) return;
+                        const st = pc.scrollTop, sh = pc.scrollHeight, ch = pc.clientHeight;
+                        if (sh - st - ch >= 200) return;
+                        if (st <= lastScrollTop - 5) return;
+                        isLoading = true;
+                        const productsToAdd = Math.min(20, allHomeProducts.length);
+                        try { appendHomeProducts(productsToAdd); } catch (e) { console.warn('appendHomeProducts', e); }
+                        setTimeout(function() { isLoading = false; }, 300);
+                    });
+                };
+                pageContainer.addEventListener('scroll', pageContainer.homeScrollHandler, { passive: true });
             }
             function renderCats() {
                 const c = document.getElementById('shop-cats');
@@ -7922,6 +7354,7 @@
             function toggleSearchHist() { const c = document.getElementById('search-history'); if (!c) return; if (c.classList.contains('collapsed')) { c.classList.remove('collapsed'); } else { c.classList.add('collapsed'); } }
             // 生成产品描述和推荐指数（确保每个产品都有不同的值）
             function getProductInfo(item) {
+                if (!item || typeof item !== 'object') return { desc: '', rating: 4.5, starsHtml: '<i class="fas fa-star item-rating-stars"></i><i class="fas fa-star item-rating-stars"></i><i class="fas fa-star item-rating-stars"></i><i class="fas fa-star-half-alt item-rating-stars"></i><i class="far fa-star item-rating-stars"></i>' };
                 const descs = {
                     'iPhone': ['A15芯片，超强性能，拍照出色', 'A16芯片，Pro级体验，专业摄影', 'A14芯片，经典设计，流畅体验'],
                     'Apple': ['品质卓越，设计精美，系统流畅', '品牌保证，用户体验极佳', '创新科技，简约时尚'],
@@ -8151,11 +7584,9 @@
                 let h = '';
                 productsToShow.forEach(i => {
                     const icon = escapeHtml(i.i || 'fa-box');
-                    // 自动获取图片路径（优先使用已有img，否则从product-images-shop文件夹查找）
-                    const imagePath = getProductImagePath(i, 'shop');
-                    const safeImg = escapeJsString(imagePath);
-                    // 如果有图片路径，使用img标签；否则使用图标
-                    const imgHtml = safeImg ? `<img src="${safeImg}" alt="${escapeHtml(i.n || '')}" onload="this.nextElementSibling.classList.add('img-hidden'); this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('img-hidden'); this.nextElementSibling.style.display='block';" loading="lazy" style="width:100% !important; height:100% !important; object-fit:cover !important; object-position:center; position:absolute; top:0; left:0; right:0; bottom:0; display:block; margin:0; padding:0; z-index:10;"><i class="fas ${icon} img-hidden" style="font-size:3rem; color:var(--accent); z-index:1; display:none;"></i>` : `<i class="fas ${icon}" style="font-size:3rem; color:var(--accent)"></i>`;
+                    // 不显示商品图片，仅使用图标
+                    const safeImg = '';
+                    const imgHtml = `<i class="fas ${icon}" style="font-size:3rem; color:var(--accent)"></i>`;
                     const itemJson = JSON.stringify(i).replace(/"/g, '&quot;');
                     const productInfo = getProductInfo(i);
                     const safeName = escapeJsString(i.n || '');
@@ -8203,27 +7634,32 @@
                     pageContainer.removeEventListener('scroll', pageContainer.shopScrollHandler);
                 }
                 
+                let shopScrollTicking = false;
                 pageContainer.shopScrollHandler = function() {
-                    // 检查是否在商城页面
                     const shopPage = document.getElementById('page-shop');
                     if (!shopPage || !shopPage.classList.contains('active')) return;
-                    
                     if (isLoading) return;
-                    
                     const scrollTop = pageContainer.scrollTop;
                     const scrollHeight = pageContainer.scrollHeight;
                     const clientHeight = pageContainer.clientHeight;
-                    
-                    if (scrollTop > lastScrollTop && scrollHeight - scrollTop - clientHeight < 200) {
-                        isLoading = true;
-                        const productsToAdd = Math.min(20, allShopProducts.length);
-                        appendShopProducts(productsToAdd);
-                        setTimeout(() => {
-                            isLoading = false;
-                        }, 300);
-                    }
-                    
                     lastScrollTop = scrollTop;
+                    if (shopScrollTicking) return;
+                    shopScrollTicking = true;
+                    requestAnimationFrame(function() {
+                        shopScrollTicking = false;
+                        const sp = document.getElementById('page-shop');
+                        if (!sp || !sp.classList.contains('active')) return;
+                        const pc = document.querySelector('.page-container');
+                        if (!pc) return;
+                        const st = pc.scrollTop, sh = pc.scrollHeight, ch = pc.clientHeight;
+                        if (sh - st - ch >= 200 || st <= lastScrollTop - 5) return;
+                        isLoading = true;
+                        try {
+                            const productsToAdd = Math.min(20, allShopProducts.length);
+                            appendShopProducts(productsToAdd);
+                        } catch (e) { console.warn('appendShopProducts', e); }
+                        setTimeout(function() { isLoading = false; }, 300);
+                    });
                 };
                 
                 pageContainer.addEventListener('scroll', pageContainer.shopScrollHandler, { passive: true });
@@ -8236,11 +7672,9 @@
                 let h = '';
                 items.forEach(i => {
                     const icon = escapeHtml(i.i || 'fa-box');
-                    // 自动获取图片路径（优先使用已有img，否则从product-images-shop文件夹查找）
-                    const imagePath = getProductImagePath(i, 'shop');
-                    const safeImg = escapeJsString(imagePath);
-                    // 如果有图片路径，使用img标签；否则使用图标
-                    const imgHtml = safeImg ? `<img src="${safeImg}" alt="${escapeHtml(i.n || '')}" onload="this.nextElementSibling.classList.add('img-hidden'); this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('img-hidden'); this.nextElementSibling.style.display='block';" loading="lazy" style="z-index:10;"><i class="fas ${icon} img-hidden" style="font-size:3rem; color:var(--accent); z-index:1; display:none;"></i>` : `<i class="fas ${icon}" style="font-size:3rem; color:var(--accent);"></i>`;
+                    // 不显示商品图片，仅使用图标
+                    const safeImg = '';
+                    const imgHtml = `<i class="fas ${icon}" style="font-size:3rem; color:var(--accent);"></i>`;
                     const itemJson = JSON.stringify(i).replace(/"/g, '&quot;');
                     const productInfo = getProductInfo(i);
                     const safeName = escapeJsString(i.n || '');
@@ -8300,45 +7734,13 @@
                 const cost = d.p ? `¥${d.p}` : `${d.c} 积分`;
                 const time = d.tm;
 
-                // 检查是否有图片，如果有则显示图片并隐藏图标
+                // 不显示商品图片，仅显示图标
                 const iconEl = document.getElementById('det-i-icon');
-                const imagePath = d.img ? d.img : (d.n ? getProductImagePath({b: d.b || '', n: Array.isArray(d.n) ? d.n[0] : d.n, img: d.img}, 'shop') : ''); // 商品详情使用商城页图片
-                
-                if (imagePath) {
-                    // 创建图片元素
-                    const imgContainer = iconEl.parentElement;
-                    const existingImg = imgContainer.querySelector('img');
-                    if (existingImg) {
-                        existingImg.src = imagePath;
-                        existingImg.onload = function() {
-                            iconEl.classList.add('img-hidden');
-                        };
-                        existingImg.onerror = function() {
-                            this.style.display = 'none';
-                            iconEl.classList.remove('img-hidden');
-                        };
-                    } else {
-                        const img = document.createElement('img');
-                        img.src = imagePath;
-                        img.style.cssText = 'max-width:100px; max-height:100px; object-fit:contain; border-radius:4px; margin-bottom:15px;';
-                        img.onload = function() {
-                            iconEl.classList.add('img-hidden');
-                        };
-                        img.onerror = function() {
-                            this.style.display = 'none';
-                            iconEl.classList.remove('img-hidden');
-                        };
-                        iconEl.parentElement.insertBefore(img, iconEl);
-                    }
-                } else {
-                    // 没有图片，只显示图标
-                    iconEl.classList.remove('img-hidden');
-                    const existingImg = iconEl.parentElement.querySelector('img');
-                    if (existingImg) {
-                        existingImg.remove();
-                    }
+                iconEl.classList.remove('img-hidden');
+                const existingImg = iconEl.parentElement.querySelector('img');
+                if (existingImg) {
+                    existingImg.remove();
                 }
-                
                 iconEl.className = `fas ${icon}`;
                 document.getElementById('det-i-name').textContent = name;
                 document.getElementById('det-i-cost').textContent = cost;
@@ -8826,7 +8228,7 @@
                     msg('安全提示已更新');
                 }
             }
-            let tm; function msg(t) { const o = document.getElementById('toast'); o.textContent = t; o.style.opacity = 1; clearTimeout(tm); tm = setTimeout(() => o.style.opacity = 0, 3000); }
+            let tm; function msg(t) { try { const o = document.getElementById('toast'); if (!o) return; o.textContent = (t != null ? String(t) : ''); o.style.opacity = 1; clearTimeout(tm); tm = setTimeout(function() { if (o) o.style.opacity = 0; }, 3000); } catch (e) { console.warn('msg', e); } }
             // 打开中奖信息模态框
             let confettiInterval = null;
             function openWinNoticeModal() {
@@ -10455,48 +9857,28 @@
                 }, 1000);
             }
 
-            // 初始化位置信息（不自动请求，等待用户交互）
+            // 打开软件后自动请求定位
             function initLocation() {
-                // 检查是否支持地理定位
                 if (!navigator.geolocation) {
                     S.location.address = '不支持定位';
                     updateLocationText();
                     return;
                 }
-                
-                // 检查权限状态（如果浏览器支持）
+                // 先显示「定位中...」，再自动发起定位请求（会触发浏览器权限弹窗）
+                S.location.address = '定位中...';
+                updateLocationText();
+                getLocation();
+                // 若浏览器支持权限 API，监听权限变化以便用户授权后自动重新定位
                 if (navigator.permissions && navigator.permissions.query) {
                     try {
-                        navigator.permissions.query({name: 'geolocation'}).then(function(result) {
-                            if (result.state === 'granted') {
-                                // 如果已经授权，自动获取位置
-                                getLocation();
-                            } else {
-                                // 如果还未询问或被拒绝，显示提示让用户点击
-                                S.location.address = '点击获取位置';
-                                updateLocationText();
-                            }
-                            
-                            // 监听权限状态变化
+                        navigator.permissions.query({ name: 'geolocation' }).then(function(result) {
                             result.onchange = function() {
                                 if (result.state === 'granted') {
                                     getLocation();
                                 }
                             };
-                        }).catch(function() {
-                            // 如果不支持权限查询，显示默认提示
-                            S.location.address = '点击获取位置';
-                            updateLocationText();
-                        });
-                    } catch(e) {
-                        // 如果权限查询失败，显示默认提示
-                        S.location.address = '点击获取位置';
-                        updateLocationText();
-                    }
-                } else {
-                    // 如果不支持权限查询API，显示默认提示
-                    S.location.address = '点击获取位置';
-                    updateLocationText();
+                        }).catch(function() {});
+                    } catch (e) {}
                 }
             }
 
@@ -10542,7 +9924,8 @@
                                 }, 500);
                                 break;
                             case error.POSITION_UNAVAILABLE:
-                                errorMsg = '位置不可用';
+                                errorMsg = '位置不可用，点击重试';
+                                setTimeout(function() { getLocation(); }, 3000);
                                 break;
                             case error.TIMEOUT:
                                 errorMsg = '定位超时';
@@ -10647,32 +10030,29 @@
                 }
             }
 
-            // 处理位置信息点击
+            // 点击定位图标：有坐标则打开谷歌地图显示该位置，否则先尝试定位
             function handleLocationClick() {
-                const address = S.location.address;
-                
-                // 如果显示的是提示信息或错误信息，尝试获取位置
-                if (address === '点击获取位置' || address === '请授权位置' || address === '定位失败' || address === '位置不可用' || address === '定位超时' || address === '不支持定位' || address === '当前位置' || !address) {
+                var lat = S.location.lat;
+                var lng = S.location.lng;
+                var address = S.location.address;
+                // 已有坐标：直接打开谷歌地图并居中显示该定位位置
+                if (lat != null && lng != null && !isNaN(lat) && !isNaN(lng)) {
+                    var url = 'https://www.google.com/maps?q=' + lat + ',' + lng + '&z=16';
+                    window.open(url, '_blank');
+                    return;
+                }
+                // 无坐标：若为错误/提示类文案则重新请求定位
+                if (address === '点击获取位置' || address === '请授权位置' || address === '定位失败' || address === '位置不可用' || address === '位置不可用，点击重试' || address === '定位超时' || address === '不支持定位' || !address) {
+                    msg('正在重新获取位置...');
                     getLocation();
                     return;
                 }
-                
-                // 如果正在定位，不重复请求
-                if (address === '定位中...') {
-                    return;
-                }
-                
-                // 如果有坐标，打开谷歌地图
-                if (S.location.lat && S.location.lng) {
-                    const url = `https://www.google.com/maps?q=${S.location.lat},${S.location.lng}`;
-                    window.open(url, '_blank');
-                } else if (address && address !== '定位中...') {
-                    // 如果有地址信息，打开谷歌地图搜索该地址
-                    const encodedAddress = encodeURIComponent(address);
-                    const url = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
-                    window.open(url, '_blank');
+                if (address === '定位中...') return;
+                // 仅有地址文案时，用地址在谷歌地图中搜索并打开
+                if (address && address !== '定位中...') {
+                    var encodedAddress = encodeURIComponent(address);
+                    window.open('https://www.google.com/maps/search/?api=1&query=' + encodedAddress, '_blank');
                 } else {
-                    // 如果正在定位，重新尝试获取
                     getLocation();
                 }
             }
@@ -10746,8 +10126,8 @@
         // 注册Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
-                alignActsContainer();
-                alignPtsFoot();
+            alignActsContainer();
+            alignPtsFoot();
                 navigator.serviceWorker.register('./sw.js')
                     .then(function(registration) {
                         console.log('ServiceWorker注册成功:', registration.scope);
@@ -10770,28 +10150,35 @@
                 alignPtsFoot();
             }, 100);
             
-            // 窗口大小改变时重新对齐
+            // 窗口大小改变时重新对齐（节流，避免频繁计算导致卡顿）
+            var resizeTimer;
             window.addEventListener('resize', function() {
-                const actsContainer = document.querySelector('.lucky-area .acts');
-                const ptsFoot = document.querySelector('.pts-foot');
-                const page = document.querySelector('.page.active');
-                if (page) {
-                    const pageRect = page.getBoundingClientRect();
-                    const pageLeft = pageRect.left;
-                    const pageWidth = pageRect.width; // 使用页面实际宽度
-                    if (actsContainer) {
-                        actsContainer.style.left = pageLeft + 'px';
-                        actsContainer.style.width = pageWidth + 'px';
-                        actsContainer.style.right = 'auto';
-                        actsContainer.style.margin = '0';
-                    }
-                    if (ptsFoot) {
-                        ptsFoot.style.left = (pageLeft - 1) + 'px'; // 向左移动1px
-                        ptsFoot.style.width = pageWidth + 'px';
-                        ptsFoot.style.right = 'auto';
-                        ptsFoot.style.margin = '0';
-                    }
-                }
+                if (resizeTimer) clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function() {
+                    resizeTimer = null;
+                    try {
+                        var actsContainer = document.querySelector('.lucky-area .acts');
+                        var ptsFoot = document.querySelector('.pts-foot');
+                        var page = document.querySelector('.page.active');
+                        if (page) {
+                            var pageRect = page.getBoundingClientRect();
+                            var pageLeft = pageRect.left;
+                            var pageWidth = pageRect.width;
+                            if (actsContainer) {
+                                actsContainer.style.left = pageLeft + 'px';
+                                actsContainer.style.width = pageWidth + 'px';
+                                actsContainer.style.right = 'auto';
+                                actsContainer.style.margin = '0';
+                            }
+                            if (ptsFoot) {
+                                ptsFoot.style.left = (pageLeft - 1) + 'px';
+                                ptsFoot.style.width = pageWidth + 'px';
+                                ptsFoot.style.right = 'auto';
+                                ptsFoot.style.margin = '0';
+                            }
+                        }
+                    } catch (e) { console.warn('resize', e); }
+                }, 150);
             });
             // 确保注册页面显示
             var registerPage = document.getElementById('page-register');
@@ -10804,8 +10191,8 @@
                 registerPage.classList.add('active');
             }
             
-            // 初始化应用
-            App.init();
+            // 初始化应用（防止未捕获错误导致闪退）
+            try { App.init(); } catch (e) { console.error('App.init', e); }
             
             // 初始化后再次确保注册页面显示（防止init()中的代码切换了页面）
             setTimeout(function() {

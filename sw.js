@@ -1,5 +1,7 @@
-// Service Worker for KOKO Mall PWA
-const CACHE_NAME = 'koko-mall-v1';
+// Service Worker for KOKO Mall PWA - Android APK Version
+const CACHE_VERSION = 'koko-mall-android-v1';
+const IMAGE_CACHE = 'koko-images-android-v1';
+
 const urlsToCache = [
   './',
   './index.html',
@@ -15,7 +17,7 @@ const urlsToCache = [
 // Install event - cache resources
 self.addEventListener('install', function(event) {
   event.waitUntil(
-    caches.open(CACHE_NAME)
+    caches.open(CACHE_VERSION)
       .then(function(cache) {
         console.log('Opened cache');
         return cache.addAll(urlsToCache);
@@ -24,6 +26,7 @@ self.addEventListener('install', function(event) {
         console.log('Cache failed:', error);
       })
   );
+  self.skipWaiting();
 });
 
 // Activate event - clean up old caches
@@ -32,7 +35,7 @@ self.addEventListener('activate', function(event) {
     caches.keys().then(function(cacheNames) {
       return Promise.all(
         cacheNames.map(function(cacheName) {
-          if (cacheName !== CACHE_NAME) {
+          if (cacheName !== CACHE_VERSION && cacheName !== IMAGE_CACHE) {
             console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
@@ -40,26 +43,34 @@ self.addEventListener('activate', function(event) {
       );
     })
   );
+  self.clients.claim();
 });
 
 // Fetch event - serve from cache, fallback to network
 self.addEventListener('fetch', function(event) {
+  const request = event.request;
+  const url = new URL(request.url);
+
+  // 图片专用缓存策略：Cache First
+  if (url.pathname.includes('/images/') || 
+      url.pathname.includes('/product-images-')) {
+    event.respondWith(cacheImage(request));
+    return;
+  }
+
+  // 其他资源：Network First with Cache Fallback
   event.respondWith(
-    caches.match(event.request)
+    caches.match(request)
       .then(function(response) {
-        // Return cached version or fetch from network
-        return response || fetch(event.request).then(function(response) {
-          // Don't cache non-successful responses
+        return response || fetch(request).then(function(response) {
           if (!response || response.status !== 200 || response.type !== 'basic') {
             return response;
           }
 
-          // Clone the response
           const responseToCache = response.clone();
-
-          caches.open(CACHE_NAME)
+          caches.open(CACHE_VERSION)
             .then(function(cache) {
-              cache.put(event.request, responseToCache);
+              cache.put(request, responseToCache);
             });
 
           return response;
@@ -67,7 +78,6 @@ self.addEventListener('fetch', function(event) {
       })
       .catch(function(error) {
         console.log('Fetch failed:', error);
-        // Return offline page or fallback
         return new Response('Offline', {
           status: 503,
           statusText: 'Service Unavailable'
@@ -75,3 +85,27 @@ self.addEventListener('fetch', function(event) {
       })
   );
 });
+
+// 图片缓存专用函数：Cache First策略
+async function cacheImage(request) {
+  const cache = await caches.open(IMAGE_CACHE);
+  const cached = await cache.match(request);
+  
+  if (cached) {
+    return cached;
+  }
+
+  try {
+    const response = await fetch(request);
+    if (response && response.status === 200) {
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch (error) {
+    console.log('Image fetch failed:', error);
+    return new Response('Image not available', {
+      status: 404,
+      statusText: 'Not Found'
+    });
+  }
+}

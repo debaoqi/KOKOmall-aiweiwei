@@ -656,7 +656,7 @@ body {
 /* Search box styles */
 .shop-search-wrapper {
     width: 100%;
-    padding: 0 0;
+    padding: 0 6px;
     box-sizing: border-box;
 }
 
@@ -667,7 +667,7 @@ body {
     margin: 6px 0 16px;
     background: var(--item-bg);
     padding: 10px 14px;
-    border-radius: 0;
+    border-radius: 3px;
     border: 1px solid var(--border-medium);
     /* match product card border */
     position: relative;
@@ -881,7 +881,7 @@ body {
 /* New Home Card Footer Buttons */
 .foot-btns {
     display: flex;
-    gap: 3px;
+    gap: 4px;
     width: 100%;
     margin-top: 0;
 }
@@ -906,7 +906,7 @@ body {
     }
     
     .foot-btns {
-        gap: 3px;
+        gap: 6px;
     }
 }
 
@@ -1010,7 +1010,7 @@ body {
 .cats {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 3px;
+    gap: 6px;
     padding: 4px 0 0;
     margin-bottom: 0;
     margin-top: -10px;
@@ -1024,7 +1024,7 @@ body {
 
 .cats-wrapper {
     width: 100%;
-    padding: 0 0;
+    padding: 0 6px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -1161,19 +1161,19 @@ body {
 
 @media (max-width: 480px) {
     .cats {
-        gap: 3px;
+        gap: 4px;
         grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     }
     
     .cats-wrapper {
-        padding: 0 0;
+        padding: 0 6px;
         width: 100%;
         box-sizing: border-box;
         margin: 0;
     }
     
     .shop-search-wrapper {
-        padding: 0 0;
+        padding: 0 6px;
         width: 100%;
         box-sizing: border-box;
     }
@@ -1195,7 +1195,7 @@ body {
     }
     
     .cats-wrapper {
-        padding: 0 0;
+        padding: 0 6px;
     }
     
     .cat-btn {
@@ -1207,11 +1207,11 @@ body {
 /* 针对非常小的屏幕 */
 @media (max-width: 320px) {
     .cats {
-        gap: 3px;
+        gap: 2px;
     }
     
     .cats-wrapper {
-        padding: 0 0;
+        padding: 0 6px;
     }
     
     .cat-btn {
@@ -1222,7 +1222,7 @@ body {
 
 .cat-btn {
     background: #fff;
-    border-radius: 0;
+    border-radius: 4px;
     padding: 6px 0px;
     display: flex;
     flex-direction: row;
@@ -1278,7 +1278,7 @@ body {
 }
 
 .shop-list {
-    padding: 0 0 100px;
+    padding: 0 6px 100px;
     /* 增加底部padding，确保产品完整显示 */
     padding-top: 0;
     margin-top: -25px;
@@ -1295,7 +1295,7 @@ body {
 
 .shop-item {
     background: #fff;
-    border-radius: 0;
+    border-radius: 3px;
     padding: 6px;
     display: flex;
     justify-content: space-between;
@@ -1310,8 +1310,6 @@ body {
     /* Added border for defined look */
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
     /* Remove vertical offset to eliminate visual spacing from shadow */
-    width: 100%;
-    box-sizing: border-box;
 }
 
 @media (max-width: 480px) {
@@ -2650,7 +2648,7 @@ body {
     }
 
     .shop-search-wrapper {
-        padding: 0 0;
+        padding: 0 6px;
     }
     
     .shop-search {
@@ -2687,7 +2685,7 @@ body {
 
     /* 确保商城产品列表完整显示 */
     .shop-list {
-        padding: 0 0 120px;
+        padding: 0 6px 120px;
         margin-top: 12px;
         gap: 2px !important;
         width: 100%;
